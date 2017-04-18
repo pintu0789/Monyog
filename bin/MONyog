@@ -1,0 +1,82 @@
+#!/bin/bash
+
+chars=( "-" "\\" "|" "/" )
+
+function process_stat()
+{
+		while [ $((`pgrep MONyog-bin | wc -l`)) -gt 0 ]
+			do
+			   process=`pgrep MONyog-bin`
+			   if [ $((`pgrep MONyog-bin | wc -l`)) -eq 0 ];  then
+				echo ""
+				echo "MONyog stopped successfully !"
+				exit 0
+			   fi
+			   pos=$(($count % 4))
+			   			
+			   echo -en "\b${chars[$pos]}"
+ 			   
+			   count=`expr $count + 1`		
+			   
+		 done
+}
+
+case "$1" in	
+	'start'|'-s')
+		
+		if [ $((`pgrep MONyog-bin | wc -l`)) -gt 0 ]; then
+			echo "MONyog is already running..."
+		else
+			progname="$0"
+			curdir=`dirname "$progname"`
+			LD_LIBRARY_PATH=${curdir}${LD_LIBRARY_PATH+":$LD_LIBRARY_PATH"}
+			export LD_LIBRARY_PATH
+			`LD_LIBRARY_PATH=/root/MONyog/out/lib/linux-glibc-2.3.2-95.50/release64/lib:/usr/kerberos/lib64 $curdir/MONyog-bin -s`
+			if [ $((`pgrep MONyog-bin | wc -l`)) -gt 0 ]; then
+				echo "MONyog started! "
+				echo `pgrep MONyog-bin` > /var/run/MONyog-bin.pid
+			else
+				echo "Sorry! Unable to start MONyog. "	
+				exit 0
+			fi
+		   
+		fi
+		;;
+		
+	'stop')
+		
+          	count=0
+	
+		if [ $((`pgrep MONyog-bin | wc -l`)) -gt 0 ];  then	
+		  `pkill -15 -x MONyog-bin`
+		   echo -n "Shutting down: "
+		   process_stat 
+			echo " "
+			echo "MONyog stopped successfully! "
+			rm -f /var/run/MONyog-bin.pid
+		else
+			echo "MONyog is not in memory..."
+		fi
+		;;
+
+	'restart'|'reload')
+                $0 stop
+                $0 start
+                ;;
+
+        'status')
+
+                if [ $((`pgrep MONyog-bin`)) -gt 0 ]; then
+                echo -n "MONyog is  running!"
+                echo " "
+                else
+                echo -n "MONyog is NOT running!"
+                echo " "
+                fi
+                ;;
+        *)
+
+                echo "Usage: $0 {start|stop|restart|reload|status}"
+                exit 1;
+
+esac

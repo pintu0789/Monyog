@@ -1,0 +1,132 @@
+===============================================================================
+1. Installation
+===============================================================================
+1.1 Redhat/Fedora systems:
+--------------------------
+To install MONyog on these systems the RPM package should be used.
+Execute the following command as 'root' user:
+
+# rpm -ivh <MONyog_package>.rpm
+
+After installing, MONyog will be started automatically as a daemon/service.
+You can immediately start monitoring your MySQL servers by 
+pointing your browser to:
+http://<YOUR_HOST>:5555 
+
+By default, MONyog listens on port 5555. There is no default password.
+Of course, the port and password are configurable.
+
+Please refer to the section "2. Configuring MONyog in Linux" for details.
+
+The 'service' command can be used to start/stop MONyog.
+The details about how to start/stop  MONyog can be found in section:
+"3. START/STOP MONyog".
+
+
+1.2 Other systems (such as systems like SUSE, Ubuntu, etc):
+-----------------------------------------------------------
+To install MONyog on these systems the .tar.gz (tarball) package should be used.
+After downloading the package, the following command can be used to extract:
+
+$ tar -xf <MONyog_package>.tar.gz
+This will extract the package contents to the directory "MONyog/".
+
+Details about how to start/stop MONyog can be found in section:
+"3. START/STOP MONyog".
+
+
+
+===============================================================================
+2. Configuring MONyog on Linux
+===============================================================================
+MONyog port and password are configurable through "MONyog.ini".
+
+If MONyog was installed from the RPM package, MONyog.ini can be found in:
+/usr/local/MONyog
+
+If MONyog is extracted from the tarball (.tar.gz package), MONyog.ini 
+can be found in the directory where MONyog was extracted.
+
+The content of this file looks like:
+
+[GENERAL]
+
+port=5555
+password=mypasswd
+
+NOTE: MONyog should be stopped before editing this file, and restarted once
+changes are saved.
+
+
+
+===============================================================================
+3. START/STOP MONyog
+===============================================================================
+3.1 Redhat/Fedora systems:
+--------------------------
+In Redhat and Fedora systems if MONyog was installed from the RPM package, 
+the daemon script 'MONyogd' can be used to start/stop the server.
+This script is installed in the directory "/etc/init.d/".
+
+You can use one of the following commands to start MONyog:
+
+# service MONyogd start
+or,
+# /etc/init.d/MONyogd start
+
+Similarly, to stop MONyog:
+
+# service MONyogd stop
+or,
+# /etc/init.d/MONyogd stop
+
+To check whether MONyog is running, use:
+
+# service MONyogd status
+
+By default in these systems MONyog will be started automatically even 
+after a system restart.
+
+
+3.2 Other systems (such as systems like SUSE, Ubuntu, etc):
+-----------------------------------------------------------
+This section applies only if you have extracted MONyog from  the
+tarball (.tar.gz package).
+
+There is a shell script named "MONyog" in the directory "MONyog/bin".
+For example if MONyog has been extracted to "~/MONyog/",
+you can start MONyog by typing:
+
+$ ~/MONyog/bin/MONyog start
+
+Similarly, to stop:
+
+$ ~/MONyog/bin/MONyog stop
+
+
+
+===============================================================================
+4. Upgrading to latest version of MONyog
+===============================================================================
+4.1 Redhat/Fedora systems:
+--------------------------
+If you are using the RPM package on these systems, it is very easy to upgrade to 
+the latest version of MONyog. 
+
+All you need to do, after downloading the latest RPM package, is execute the
+command:
+
+# rpm -Uvh <MONyog_package>.rpm
+
+And you are done.
+
+
+4.2 Other systems (such as systems like SUSE, Ubuntu, etc):
+-----------------------------------------------------------
+If you are using the tarball (.tar.gz package), stop the MONyog daemon/service.
+Refer to section (3.2) for more details on how to stop MONyog.
+
+Then extract the new tarball into the same direcory where the previous version 
+of MONyog was extracted.
+
+Start the MONyog daemon again.

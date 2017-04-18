@@ -1,0 +1,205 @@
+-- MONyog MIB
+-- Webyog Inc.
+-- Last Modified: 19th November 2009
+
+MONYOG-TRAP-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+	enterprises
+		FROM SNMPv2-SMI;
+
+webyog OBJECT IDENTIFIER ::= { enterprises 34330 } 	-- Note: As assigned by IANA (http://www.iana.org/)
+monyog OBJECT IDENTIFIER ::= { webyog 1 }
+
+monitor	MODULE-IDENTITY
+	LAST-UPDATED "0911190000Z"
+	ORGANIZATION "Webyog Inc."
+	CONTACT-INFO
+		"http://www.webyog.com"
+	DESCRIPTION "MIB module for grouping all Monitor/Adivsor related variables from MONyog."
+::= { monyog 1 }
+
+status	MODULE-IDENTITY
+	LAST-UPDATED "0911190000Z"
+	ORGANIZATION "Webyog Inc."
+	CONTACT-INFO
+		"http://www.webyog.com"
+	DESCRIPTION "MIB module for grouping all status related variables from MONyog."
+::= { monyog 2 }
+
+ServerName		OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-only
+	STATUS mandatory
+	DESCRIPTION "The name of the monitored server as registered with MONyog."
+::= { monitor 1 }
+
+SamplingTimeFrame	OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-only
+	STATUS mandatory
+	DESCRIPTION "The time period between two samples of data."
+::= { monitor 2 }
+
+Type			OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-only
+	STATUS mandatory
+	DESCRIPTION "Type of the alert."
+::= { monitor 3 }
+
+CounterGroup		OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-only
+	STATUS mandatory
+	DESCRIPTION "The group to which the counter causing this alert belongs."
+::= { monitor 4 }
+
+CounterName		OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-only
+	STATUS mandatory
+	DESCRIPTION "The name of the counter causing this alert."
+::= { monitor 5 }
+
+CounterValue		OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-only
+	STATUS mandatory
+	DESCRIPTION "The current value of the counter, if applicable."
+::= { monitor 6 }
+
+CounterThreshold	OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-only
+	STATUS mandatory
+	DESCRIPTION "The threshold value for this counter, if applicable."
+::= { monitor 7 }
+
+Advice			OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-only
+	STATUS mandatory
+	DESCRIPTION "The advice from MONyog to resolve this issue."
+::= { monitor 8 }
+
+Copyright		OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-only
+	STATUS mandatory
+	DESCRIPTION "Copyright information."
+::= { monitor 9 }
+
+-- New Monitor variables added for Query Analyzer traps
+ThreadId    OBJECT-TYPE
+  SYNTAX OCTET STRING
+  ACCESS  read-only
+  STATUS  mandatory
+  DESCRIPTION "The identifier of the MySQL thread executing the slow query."
+::= { monitor 10 }
+  
+QueryExecTime OBJECT-TYPE
+  SYNTAX OCTET STRING
+  ACCESS read-only
+  STATUS mandatory
+  DESCRIPTION "The time the slow query has been executing for."
+::= { monitor 11 }
+
+ActionTaken   OBJECT-TYPE
+  SYNTAX OCTET STRING
+  ACCESS read-only
+  STATUS mandatory
+  DESCRIPTION "The action taken by MONyog."
+::= { monitor 12 }
+
+Query        OBJECT-TYPE
+  SYNTAX OCTET STRING
+  ACCESS read-only
+  STATUS mandatory
+  DESCRIPTION "The slow query."
+::= { monitor 13 }
+
+State        OBJECT-TYPE
+  SYNTAX OCTET STRING
+  ACCESS read-only
+  STATUS mandatory
+  DESCRIPTION "The query state."
+::= { monitor 14 }
+
+VariableName        OBJECT-TYPE
+  SYNTAX OCTET STRING
+  ACCESS read-only
+  STATUS mandatory
+  DESCRIPTION "The server variable name."
+::= { monitor 16 }
+
+OldValue        OBJECT-TYPE
+  SYNTAX OCTET STRING
+  ACCESS read-only
+  STATUS mandatory
+  DESCRIPTION "The server variable's value."
+::= { monitor 17 }
+
+NewValue        OBJECT-TYPE
+  SYNTAX OCTET STRING
+  ACCESS read-only
+  STATUS mandatory
+  DESCRIPTION "The server variable's value."
+::= { monitor 18 }
+
+User        OBJECT-TYPE
+  SYNTAX OCTET STRING
+  ACCESS read-only
+  STATUS mandatory
+  DESCRIPTION "The MySQL user who executed this query"
+::= { monitor 19 }
+
+Host        OBJECT-TYPE
+  SYNTAX OCTET STRING
+  ACCESS read-only
+  STATUS mandatory
+  DESCRIPTION "The host name of the client executing this query"
+::= { monitor 20 }
+
+DB        OBJECT-TYPE
+  SYNTAX OCTET STRING
+  ACCESS read-only
+  STATUS mandatory
+  DESCRIPTION "The name of the database in use currently."
+::= { monitor 21 }    
+
+LongRunningQueryInfo        OBJECT-TYPE
+  SYNTAX OCTET STRING
+  ACCESS read-only
+  STATUS mandatory
+  DESCRIPTION "Long Running Query information."
+::= { monitor 24 }
+
+Info			   OBJECT-TYPE
+	SYNTAX OCTET STRING
+	ACCESS read-only
+	STATUS mandatory
+	DESCRIPTION "Contains miscellaneous information."
+::= { status 1 }
+
+exampleStatusVar1 OBJECT-TYPE
+  SYNTAX OCTET STRING
+  ACCESS read-only
+  STATUS mandatory
+  DESCRIPTION "The test trap."
+::= { monitor 15 }
+
+	-- MONyog Private Enterprise Traps
+
+		monitorTrap	TRAP-TYPE
+			ENTERPRISE	monyog
+			VARIABLES	{ ServerName, SamplingTimeFrame, Type, CounterGroup, CounterName, CounterValue, Advice }
+			DESCRIPTION	"A monitor trap is sent when one of the Monitors of MONyog reaches a warning or a critical condition."
+		::= 1
+
+		statusTrap	TRAP-TYPE
+			ENTERPRISE	monyog
+			VARIABLES	{ exampleStatusVar1 }
+			DESCRIPTION	"A status trap is sent as a test or to indicate the start-up of MONyog."
+		::= 2
+END

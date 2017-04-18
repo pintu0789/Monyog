@@ -1,0 +1,23 @@
+# To enable file rotation copy this file to /etc/logrotate.d/ for rotation
+
+# File path of "MONyog.log" to be rotated for RPM it is /usr/local/MONyog and for TAR, where you have extracted file path
+/home/user/MONyog/MONyog.log 
+{
+	# Rotate on weekly basis
+	weekly
+
+	# If a log file is missing, move to other file for rotation without any error
+	missingok
+
+	# Log files are rotated 7 times i.e. 7 copies are retained
+	rotate 7
+
+	# File will be compressed with gzip
+	compress
+
+	# Postpone  compression of the previous log file to the next rotation cycle
+	delaycompress
+
+	# Do not rotate the log if it is empty
+	notifempty
+}
